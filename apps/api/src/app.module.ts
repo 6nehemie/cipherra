@@ -1,5 +1,5 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { DetectionModule } from './detection/detection.module';
 import { AlchemyModule } from './alchemy/alchemy.module';
 import { TransactionsModule } from './transactions/transactions.module';
@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as process from 'node:process';
 import { Attacks } from './attacks/entities/attacks.entity';
 import { ApiKeyModule } from './api-key/api-key.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -16,6 +17,12 @@ import { ApiKeyModule } from './api-key/api-key.module';
     AlchemyModule,
     TransactionsModule,
     AttacksModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true, // allows the configuration to be available globally
     }),
@@ -34,6 +41,10 @@ import { ApiKeyModule } from './api-key/api-key.module';
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
