@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import * as process from 'node:process';
 import { Attacks } from './attacks/entities/attacks.entity';
+import { ApiKeyModule } from './api-key/api-key.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Attacks } from './attacks/entities/attacks.entity';
       synchronize: true, // only in dev mode
       // logging: true, // Enable logging for debugging
     }),
+    ApiKeyModule,
   ],
   controllers: [],
   providers: [

@@ -1,9 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { DetectionService } from './detection.service';
 import { DetectionDto } from './dto/detection.dto';
 import { InitiateDetectionDto } from './dto/initiate-detection.dto';
+import { ApiKeyGuard } from 'src/api-key/guards/api-key.guard';
 
 @Controller('detection')
+@UseGuards(ApiKeyGuard)
 export class DetectionController {
   constructor(private readonly detectionService: DetectionService) {}
 
