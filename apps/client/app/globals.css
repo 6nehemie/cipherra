@@ -10,4 +10,8 @@ body {
   :root {
     --radius: 0.5rem;
   }
+
+  .p-side {
+    @apply px-4 md:px-6 lg:px-8 2xl:px-10;
+  }
 }
